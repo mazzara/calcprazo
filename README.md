@@ -41,9 +41,9 @@ User email information is optional, but will help user as the Calculation Demons
 
 # Models for *CALCPRAZO*
 =======================
-# Calcprazo is a simple date calculator aimed to be used by local laweyers a and legal staff in Sao Paulo / Brazil.
-# Provided 2 iputs, a start date, and a delta days, it will compute the *due date* considering local and special non working days.
-# User will get the *due date* in 3 output:
-# 1. *due date* calculated by simple current delta days, so: March,1,2022(Tue) + 7 days = March,7,2022(Mon)
-# 2. *due date* calculated by genaral working days, so:  March,1,2022(Tue) + 7 days = March,10,2022(Thu)
-# 3. *due date* same as above, but calculated by general working days, plus special non working days (special cases)
+Calcprazo is a simple date calculator aimed to be used by local laweyers a and legal staff in Sao Paulo / Brazil.
+Provided 2 iputs, a start date, and a delta days, it will compute the *due date* considering local and special non working days.
+User will get the *due date* in 3 output:
+1. *due date* calculated by simple current delta days, so: March,1,2022(Tue) + 7 days = March,7,2022(Mon)
+2. *due date* calculated by genaral working days, so:  March,1,2022(Tue) + 7 days = March,10,2022(Thu)
+3. *due date* same as above, but calculated by general working days, plus special non working days (special cases)
