@@ -7,8 +7,8 @@ The present project is a migration to a Django Application open source free for 
 
 ## Funcionality.
 ### INPUTs
-1st User inputs a start date, or date 0 (zero).
-2nd User inputs the (+) plus or (-) minus delta days to calculate the DEADLINE
+1st User inputs a start date, or date 0 (zero).  
+2nd User inputs the (+) plus or (-) minus delta days to calculate the DEADLINE. 
 
 ### OUTPUTs
 App will calculate and return 3 (three) results:
