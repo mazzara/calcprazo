@@ -1,5 +1,5 @@
 # CALCPRAZO
-Calc prazo is FREE and OPEN SOURCE simple date calculator aimed to be used by local lawyers and legal assistents for daly deadline calculation.
+Calc prazo is FREE and simple date calculator aimed to be used by local lawyers and legal assistents for daly deadline calculation.
 
 The calculator was first created as a spreadsheet publicaly shered via gogle drive.
 
