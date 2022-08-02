@@ -5,7 +5,7 @@ The calculator was first created as a spreadsheet publicaly shered via gogle dri
 
 The present project is a migration to a Django Application open source free for general use, as a tool for quickly calculate legal deadlines.
 
-## The function is very simple.
+## Funcionality.
 ### INPUTs
 1st User inputs a start date, or date 0 (zero).
 2nd User inputs the (+) plus or (-) minus delta days to calculate the DEADLINE
