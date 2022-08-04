@@ -40,3 +40,36 @@ User email information is optional, but will help user as the Calculation Demons
 
 
 
+1. Perform migrations: 
+
+    python manage.py makemigrations
+
+    Or Do the migrations separately in case the command does not fail.
+
+    python manage.py makemigrations calcprazo
+
+
+    And finally create the database.
+
+    python manage.py migrate
+
+
+3. Run the project:
+
+    python manage.py runserver
+
+Load test data (Optional):
+
+* In Local:
+
+    python manage.py loaddata calcprazo/data/users.json
+
+    python manage.py loaddata calcprazo/data/feriados.json
+
+
+* Admin information
+
+    email: admin@gmail.com
+    
+    password: admin!@#
+

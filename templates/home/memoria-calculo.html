@@ -1,0 +1,427 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page-title %}Memoria de calculo{% endblock%}
+{% block css%}
+<!-- DataTables -->
+<link href="{% static 'libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+<!-- Responsive datatable examples -->
+<link href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" /> 
+<link href="{% static 'libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'css/datepicker3.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block content %}
+<div class="container-xl">
+    <!-- Page title -->
+    <div class="page-header d-print-none">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <h2 class="page-title">
+                    Memoria de calculo
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-body">
+    <div class="container-xl">
+        <div class="row row-cards">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Memoria de calculo</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive pt-1">
+                            <table id="datatable" class="table table-bordered align-middle dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>data</th>
+                                        <th>Dia da Semana</th>
+                                        <th>Feriado</th>
+                                        <th>Dia da Semana (Domingo =1)</th>
+                                        <th>Contagem em Dias Corridos</th>
+                                        {% comment %} <th>dias corridos</th>
+                                        <th>dias uteis banco</th>
+                                        <th>dias_uteis_tribunal</th> {% endcomment %}
+                                        <th>Dia útil (0=desconsiderado)</th>
+                                        <th>Contagem em Dias Úteis</th>
+                                        <th>Email</th>
+                                        <th>action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                 {% for calcualte in calculateList %}
+                                    <tr>
+                                        <td class="align-middle">{{calcualte.data_evento|date:"d/b./Y"|default_if_none:""}}</td>
+                                        <td class="align-middle">{{calcualte.dia_da_semana|default_if_none:""}}</td>
+                                        <td class="align-middle">{{calcualte.feriado|default_if_none:""}}</td>
+                                        <td class="align-middle">{{calcualte.aia_da_semana_num|default_if_none:""}}</td>
+                                        <td class="align-middle">{{calcualte.prazo|default_if_none:0}}</td>
+                                        {% comment %} <td class="align-middle">{{calcualte.dias_corridos|date:"d/b./Y"|default_if_none:""}}</td>
+                                        <td class="align-middle">{{calcualte.dias_uteis_banco|date:"d/b./Y"|default_if_none:""}}</td>
+                                        <td class="align-middle">{{calcualte.dias_uteis_tribunal|date:"d/b./Y"|default_if_none:""}}</td> {% endcomment %}
+                                        <td class="align-middle">{{calcualte.dia_util|default_if_none:0 }}</td>
+                                        <td class="align-middle">{{calcualte.contagem_em_dias_uteis|default_if_none:0 }}</td>
+                                        <td class="align-middle">{{calcualte.adv_email|default_if_none:""}}</td>
+                                        <td class="align-middle">
+                                            <a href="javascript:void(0);" onclick="updateCalc('{{calcualte.id}}')" title="Edit">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                                    <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                                                    <path d="M16 5l3 3"></path>
+                                                </svg>
+                                            </a>
+                                            <a href="javascript:void(0);" onclick="deleteCalc('{{calcualte.id}}')" title="Delete">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <line x1="4" y1="7" x2="20" y2="7"></line>
+                                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                    <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                                    <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                                 </svg>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal modal-blur fade" id="modal-delete" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-status bg-danger"></div>
+            <div class="modal-body text-center py-4">
+            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9v2m0 4v.01" /><path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" /></svg>
+                <h3>Tem certeza?</h3>
+                <div class="text-muted">
+                    Deseja realmente remover o registro?
+                </div>
+                <input type="hidden" id="del_id" value="-1">
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col">
+                            <a href="javascript:void(0);" class="btn w-100" data-bs-dismiss="modal">
+                                Cancelar
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a href="javascript:void(0);" class="btn btn-danger w-100" id="del_confirm">
+                                Excluir 
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal modal-blur fade" id="calculoModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="head_title">Atualizar Memoria de calculo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="needs-validation" id="calculoForm">
+                {% csrf_token %}
+                <div id="text_error" class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Evento</label>
+                    <input type="type" class="form-control" name="evento" id="evento" placeholder="Insira o evento" required />
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xl-6">
+                        <div class="mb-3">
+                            <label class="form-label">Publicação</label>
+                            <div class="input-icon mb-2">
+                                <input class="form-control" placeholder="Selecione uma data" id="publisherDate"  name="publisherDate" required />
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+
+                        <div class="mb-3">
+                            <label class="form-label">Prazo</label>
+                            <input type="type" class="form-control js-number" name="prazo" id="prazo" placeholder="Prazo de entrada" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xl-6">
+                        <div class="mb-3">
+                            <label class="form-label">Dias Corridos</label>
+                            <input type="text" class="form-control" name="calendarDate" id="calendarDate" placeholder="Dias Corridos" required readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <div class="mb-3">
+                            <label class="form-label">Dias Úteis (sem contar feriados)</label>
+                            <input type="text" class="form-control" name="businessDate" id="businessDate"  placeholder="Dias Úteis (sem contar feriados)" required readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xl-6">
+                        <div class="mb-3">
+                            <label class="form-label">Dias Úteis c/ Feriado + TJSP</label>
+                            <input type="text" class="form-control" name="businessHolidayDate" id="businessHolidayDate" placeholder="Dias Úteis c/ Feriado + TJSP" required readonly />
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="calculoid" value="-1" />
+            </form>
+
+        </div>
+        <div class="modal-footer">
+          <a href="javascript:void(0);" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+            Cancelar
+          </a>
+          <a href="javascript:void(0);" class="btn btn-primary ms-auto calculo_btn">
+            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+                Atualizar
+          </a>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal modal-blur fade" id="modal-delete" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-status bg-danger"></div>
+            <div class="modal-body text-center py-4">
+            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9v2m0 4v.01" /><path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" /></svg>
+                <h3>Tem certeza?</h3>
+                <div class="text-muted">
+                    Deseja realmente remover o registro?
+                </div>
+                <input type="hidden" id="del_id" value="-1">
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col">
+                            <a href="javascript:void(0);" class="btn w-100" data-bs-dismiss="modal">
+                                Cancelar
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a href="javascript:void(0);" class="btn btn-danger w-100" id="del_confirm">
+                                Excluir 
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<!-- Responsive examples -->
+<script src="{% static 'libs/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+<!-- Buttons examples -->
+<script src="{% static 'libs/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'libs/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-buttons/js/buttons.colVis.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'js/moment/min/moment.min.js' %}"></script>
+<script>
+    $("#datatable").DataTable({
+        dom: "<'row'<'col-sm-6'B><'col-sm-6'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-3 text-start'i><'col-sm-3 mt-2 text-start'l><'col-sm-6 mt-2'p>>",
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Portuguese.json"
+        },
+        ordering: false,
+        buttons: [
+            {
+                extend: 'collection',
+                text: "Export",
+                buttons : [
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                ]
+            }
+        ],
+    }).buttons().container().appendTo("#datatable_wrapper .col-md-6:eq(0)");
+    $(".dataTables_length select").addClass("form-select form-select-sm");
+    $("#text_error").hide();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    $('#publisherDate').datepicker({
+        keyboardNavigation: false,
+        forceParse: false,
+        autoclose: true,
+        format: 'yyyy-mm-dd',
+    }).on("change", function (e) {
+        if ($("#prazo").val() !== "" && $("#publisherDate").val() !== "") {
+            console.log($("#prazo").val(), $("#publisherDate").val())
+            $.ajax({
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+                url: '{% url "calcprazo:get-calc-data" %}',
+                data: {
+                    publisherDate: $("#publisherDate").val(),
+                    prazo: $("#prazo").val()
+                },
+                type: 'POST',
+                success: function (data) {
+                    $("#calendarDate").val(data.calendarDate);
+                    $("#businessDate").val(data.businessDate);
+                    $("#businessHolidayDate").val(data.businessHolidayDate);
+                }
+            });
+        }
+    });
+        
+    $(".js-number").keydown(function (event) {
+        if (event.shiftKey == true) {
+            event.preventDefault();
+        }
+
+        if ((event.keyCode >= 48 && event.keyCode <= 57) || 
+            (event.keyCode >= 96 && event.keyCode <= 105) || 
+            event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+            event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+
+        } else {
+            event.preventDefault();
+        }
+
+        if($(this).val().indexOf('.') !== -1 && event.keyCode == 190)
+            event.preventDefault(); 
+    });
+    $("#prazo").keyup(function(e) {
+        if ($("#prazo").val() !== "" && $("#publisherDate").val() !== "") {
+            console.log($("#prazo").val(), $("#publisherDate").val())
+            $.ajax({
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+                url: '{% url "calcprazo:get-calc-data" %}',
+                data: {
+                    publisherDate: $("#publisherDate").val(),
+                    prazo: $("#prazo").val()
+                },
+                type: 'POST',
+                success: function (data) {
+                    $("#calendarDate").val(data.calendarDate);
+                    $("#businessDate").val(data.businessDate);
+                    $("#businessHolidayDate").val(data.businessHolidayDate);
+                }
+            });
+        }
+    });
+
+    function deleteCalc(id) {
+        $("#del_id").val(id);
+        $("#modal-delete").modal('show');
+    }
+    function updateCalc(id) {
+        $("#calculoid").val(id);
+        $("#head_title").html('Atualizar Memoria de calculo');
+        $(".calculo_btn").html('Atualizar');
+        $.ajax({
+            headers: { "X-CSRFToken": '{{csrf_token}}' },
+            url: '{% url "calcprazo:ajax_get_calculo" %}',
+            data: {
+                calculoid: $("#calculoid").val(),
+            },
+            type: 'POST',
+            success: function (data) {
+                $("#evento").val(data.evento);
+                $("#prazo").val(data.prazo);
+                $("#publisherDate").val(data.publisherDate);
+                $('#publisherDate').datepicker('setDate', data.publisherDate)
+                $("#calendarDate").val(data.calendarDate);
+                $("#businessDate").val(data.businessDate);
+                $("#businessHolidayDate").val(data.businessHolidayDate);   
+            }
+        });
+        $("#calculoModal").modal('show')
+    }
+    $("#del_confirm").on('click', function(event){
+        $.ajax({
+            headers: { "X-CSRFToken": '{{csrf_token}}' },
+            url: '{% url "calcprazo:ajax_delete_calculo" %}',
+            data: {
+                'calculo_id': $("#del_id").val(),
+            },
+            type: 'POST',
+            success: function (data) {
+                if (data.status == "ok") {
+                    location.reload(); 
+                }
+            }
+        });
+        $('#deletModal').modal('hide');
+    });
+    $(".calculo_btn").on('click', function(e) {
+        var form = $("#calculoForm");
+		if (form[0].checkValidity() === false) {
+			event.preventDefault();
+			event.stopPropagation();
+			form.addClass('was-validated');
+			return;
+		} 
+        $.ajax({
+            headers: { "X-CSRFToken": '{{csrf_token}}' },
+            url: '{% url "calcprazo:ajax_update_calculo" %}',
+            data: {
+                calculoid: $("#calculoid").val(),
+                evento: $("#evento").val(),
+                prazo: $("#prazo").val(),
+                publisherDate: $("#publisherDate").val(),
+                calendarDate: $("#calendarDate").val(),
+                businessDate: $("#businessDate").val(),
+                businessHolidayDate: $("#businessHolidayDate").val(),
+            },
+            type: 'POST',
+            success: function (data) {
+                console.log(data)
+                if(data.status=="Success"){
+                    $("#text_error").hide();
+                    location.reload();
+                } else {
+                    $("#text_error").html(data.messages);
+                    $("#text_error").show();
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

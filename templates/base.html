@@ -1,0 +1,127 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{% static 'favicon.png' %}">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>{% block page-title %}Calculadora{% endblock %}</title>
+    <!-- CSS files -->
+    <link href="{% static 'css/tabler.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/tabler-vendors.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/demo.min.css' %}" rel="stylesheet"/>
+    {% block css %} {% endblock css %}
+  </head>
+  <body >
+    <div class="page">
+        <header class="navbar navbar-expand-md navbar-light d-print-none">
+            <div class="container-xl">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <a href="/">
+                    <img src="{% static 'logo.png' %}" width="110" height="32" alt="Tabler" class="navbar-brand-image">
+                </a>
+            </h1>
+            <div class="navbar-nav flex-row order-md-last">
+                <div class="nav-item dropdown">
+                <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                    <span class="avatar avatar-sm" style="background-image: url({% static '000f.jpg' %})"></span>
+                    <div class="d-none d-xl-block ps-2">
+                        <div>{{request.user.username}}</div>
+                        <div class="mt-1 small text-muted">{{request.user.email}}</div>
+                    </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <a href="javascript:void(0);" class="dropdown-item">Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{% url 'calcprazo:view_logout' %}" class="dropdown-item">Logout</a>
+                </div>
+                </div>
+            </div>
+            </div>
+        </header>
+        <div class="navbar-expand-md">
+            <div class="collapse navbar-collapse" id="navbar-menu">
+            <div class="navbar navbar-light">
+                <div class="container-xl">
+                    <ul class="navbar-nav">
+
+                        <li class="nav-item {% if 'calculadora' in request.path %}active{% endif %}">
+                            <a class="nav-link" href="{% url 'calcprazo:calculate_view' %}">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3" /><line x1="12" y1="12" x2="20" y2="7.5" /><line x1="12" y1="12" x2="12" y2="21" /><line x1="12" y1="12" x2="4" y2="7.5" /><line x1="16" y1="5.25" x2="8" y2="9.75" /></svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Calculadora
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {% if 'memoria-de-calculo' in request.path %}active{% endif %}">
+                            <a class="nav-link" href="{% url 'calcprazo:memoria-de-calculo' %}" >
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="9 11 12 14 20 6" /><path d="M20 12v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h9" /></svg>
+                                </span>
+                                <span class="nav-link-title">
+                                Memoria de calculo
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {% if 'feriados' in request.path %}active{% endif %}">
+                            <a class="nav-link" href="{% url 'calcprazo:feriados' %}" >
+                                <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="4" y="5" width="16" height="16" rx="2"></rect>
+                                        <line x1="16" y1="3" x2="16" y2="7"></line>
+                                        <line x1="8" y1="3" x2="8" y2="7"></line>
+                                        <line x1="4" y1="11" x2="20" y2="11"></line>
+                                        <line x1="11" y1="15" x2="12" y2="15"></line>
+                                        <line x1="12" y1="15" x2="12" y2="18"></line>
+                                     </svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Feriados
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="page-wrapper">
+            <!-- content goes here -->
+            {% block content %}
+            {% endblock %}
+            
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="row text-center align-items-center flex-row-reverse">
+                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                            <ul class="list-inline list-inline-dots mb-0">
+                                <li class="list-inline-item">
+                                    Copyright &copy; 2022
+                                    <a href="javascript:void(0);" class="link-secondary">Calcprazo</a>.
+                                    All rights reserved.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Calculadora Core -->
+    <script src="{% static 'js/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'js/tabler.min.js' %}"></script>
+    <script src="{% static 'js/demo.min.js' %}"></script>
+    <script src="{% static 'js/validations.js' %}"></script>
+    {% block extra_js %}
+    {% endblock %}
+  </body>
+</html>
