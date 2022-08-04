@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block page-title %}Feriado{% endblock%}
+{% block page-title %}Feriados{% endblock%}
 {% block css%}
 <!-- DataTables -->
 <link href="{% static 'libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'css/datepicker3.css' %}" rel="stylesheet" type="text/css" />
 <!-- Responsive datatable examples -->
 <link href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" /> 
 {% endblock %}
@@ -15,7 +16,7 @@
             <div class="col">
                 <!-- Page pre-title -->
                 <h2 class="page-title">
-                    Feriado
+                    Feriados
                 </h2>
             </div>
             <!-- Page title actions -->
@@ -38,7 +39,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Feriado</h4>
+                        <h4 class="card-title">Feriados</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive pt-1">
@@ -182,8 +183,8 @@
 <!-- Responsive examples -->
 <script src="{% static 'libs/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
 <script src="{% static 'libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js' %}"></script>
-<script src="{% static 'libs/litepicker/dist/litepicker.js' %}" defer></script>
 <script src="{% static 'js/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
 <script>
     $("#text_error").hide();
     $("#datatable").DataTable({
@@ -211,6 +212,7 @@
                 $("#feriado").val(data.feriado);
                 $("#provimento").val(data.provimento);
                 $("#dataFeriado").val(data.dataFeriado); 
+                $('#dataFeriado').datepicker('setDate', data.dataFeriado)
             }
         });
         $("#feriadoModal").modal('show')
@@ -231,13 +233,20 @@
         });
         $('#deletModal').modal('hide');
     });
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
     $(".feriadoAdd").on('click', function(e) {
         $("#head_title").html('Adicionar Feriado');
         $(".feriado_btn").html('Adicionar');
         $("#feriadoid").val("-1");
         $("#feriado").val("");
         $("#provimento").val("");
-        $("#dataFeriado").val("");
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = monthNames[today.getMonth()]; 
+        var yyyy = today.getFullYear();
+        $('#dataFeriado').datepicker('setDate', yyyy + "-" + mm + "-" + dd)
         $("#feriadoModal").modal('show');
     });
     $(".feriado_btn").on('click', function(e) {
@@ -271,19 +280,12 @@
     });
 </script>
 <script>
-    // @formatter:off
-    document.addEventListener("DOMContentLoaded", function () {
-    	window.Litepicker && (new Litepicker({
-    		element: document.getElementById('dataFeriado'),
-    		buttonText: {
-    			previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="15 6 9 12 15 18" /></svg>`,
-    			nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="9 6 15 12 9 18" /></svg>`,
-    		},
-    	}));
+    $('#dataFeriado').datepicker({
+        keyboardNavigation: false,
+        forceParse: false,
+        autoclose: true,
+        format: 'yyyy-mm-dd',
     });
-    // @formatter:on
     var curdate = moment(new Date()).format("YYYY-MM-DD");
     $("#dataFeriado").val(curdate);
 

@@ -7,11 +7,9 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="{% static 'favicon.png' %}">
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Home - {% block page-title %}Calculadora{% endblock %}</title>
+    <title>{% block page-title %}Calculadora{% endblock %}</title>
     <!-- CSS files -->
     <link href="{% static 'css/tabler.min.css' %}" rel="stylesheet"/>
-    <link href="{% static 'css/tabler-flags.min.css' %}" rel="stylesheet"/>
-    <link href="{% static 'css/tabler-payments.min.css' %}" rel="stylesheet"/>
     <link href="{% static 'css/tabler-vendors.min.css' %}" rel="stylesheet"/>
     <link href="{% static 'css/demo.min.css' %}" rel="stylesheet"/>
     {% block css %} {% endblock css %}

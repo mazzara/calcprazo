@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block page-title %}Calculadora{% endblock%}
+{% block css %}
+<link href="{% static 'css/datepicker3.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block content %}
 <div class="container-xl">
     <!-- Page title -->
@@ -56,9 +59,6 @@
                                         <label class="form-label">Publicação</label>
                                         <div class="input-icon mb-2">
                                             <input class="form-control" placeholder="Selecione uma data" id="publisherDate"  name="publisherDate" required />
-                                            <span class="input-icon-addon"><!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
-                                              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="4" y="5" width="16" height="16" rx="2" /><line x1="16" y1="3" x2="16" y2="7" /><line x1="8" y1="3" x2="8" y2="7" /><line x1="4" y1="11" x2="20" y2="11" /><line x1="11" y1="15" x2="12" y2="15" /><line x1="12" y1="15" x2="12" y2="18" /></svg>
-                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -105,24 +105,12 @@
 </div>
 {% endblock %}
 {% block extra_js %}
-<script src="{% static 'libs/litepicker/dist/litepicker.js' %}" defer></script>
+<script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
 <script src="{% static 'js/moment/min/moment.min.js' %}"></script>
 <script>
-    // @formatter:off
-    document.addEventListener("DOMContentLoaded", function () {
-    	window.Litepicker && (new Litepicker({
-    		element: document.getElementById('publisherDate'),
-    		buttonText: {
-    			previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="15 6 9 12 15 18" /></svg>`,
-    			nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="9 6 15 12 9 18" /></svg>`,
-    		},
-    	}));
-    });
-    // @formatter:on
-</script>
-<script>
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
     var curdate = moment(new Date()).format("YYYY-MM-DD");
     $("#publisherDate").val(curdate);
     $(".js-number").keydown(function (event) {
@@ -143,6 +131,30 @@
             event.preventDefault(); 
     });
     $("#prazo").keyup(function(e) {
+        if ($("#prazo").val() !== "" && $("#publisherDate").val() !== "") {
+            console.log($("#prazo").val(), $("#publisherDate").val())
+            $.ajax({
+                headers: { "X-CSRFToken": '{{csrf_token}}' },
+                url: '{% url "calcprazo:get-calc-data" %}',
+                data: {
+                    publisherDate: $("#publisherDate").val(),
+                    prazo: $("#prazo").val()
+                },
+                type: 'POST',
+                success: function (data) {
+                    $("#calendarDate").val(data.calendarDate);
+                    $("#businessDate").val(data.businessDate);
+                    $("#businessHolidayDate").val(data.businessHolidayDate);
+                }
+            });
+        }
+    });
+    $('#publisherDate').datepicker({
+        keyboardNavigation: false,
+        forceParse: false,
+        autoclose: true,
+        format: 'yyyy-mm-dd',
+    }).on("change", function (e) {
         if ($("#prazo").val() !== "" && $("#publisherDate").val() !== "") {
             console.log($("#prazo").val(), $("#publisherDate").val())
             $.ajax({

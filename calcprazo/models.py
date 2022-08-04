@@ -111,3 +111,6 @@ class CalculaPrazo(models.Model):
     def __str__(self):
         return self.evento
 
+    class Meta:
+        ordering = ['-data_evento']
+
