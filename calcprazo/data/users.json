@@ -1,0 +1,18 @@
+[
+    {
+      "model": "calcprazo.user",
+      "pk": 1,
+      "fields": {
+        "password": "pbkdf2_sha256$216000$t0rLbb7szDTE$RWk+nv4Xs1NuB+L5E4ku3/Wv84qK75QnvW3Qm0qyk30=",
+        "last_login": "2022-08-04T10:54:26.769Z",
+        "is_superuser": true,
+        "username": "Marcelo",
+        "first_name": "Marcelo",
+        "last_name": "Marcelo",
+        "email": "admin@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2022-08-04T18:27:51Z"
+      }
+    }
+]
